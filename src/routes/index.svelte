@@ -1,5 +1,9 @@
+<script>
+	import Calendar from '../components/Calendar.svelte';
+</script>
+
 <main>
-	<h1>Hello</h1>
+	<Calendar />
 </main>
 
 <style lang="scss">
