@@ -16,7 +16,8 @@
 		year,
 		selectMonth,
 		getMonthNumberByName,
-		monthName
+		monthName,
+		isToday
 	} from '../stores/calendar';
 	import { t } from '../i18n';
 	import { createEventDispatcher } from 'svelte';
@@ -82,6 +83,7 @@
 							on:click={() => mDay > 0 && select(mDay)}
 							class:cursor-pointer={mDay > 0}
 							class:hover={mDay > 0}
+							class:today={$isToday(mDay)}
 						>
 							{mDay > 0 ? mDay : ''}
 						</span>
@@ -146,6 +148,11 @@
 
 		& span {
 			text-align: center;
+		}
+
+		.today {
+			background: var(--clr-link);
+			color: var(--clr-gray100);
 		}
 	}
 

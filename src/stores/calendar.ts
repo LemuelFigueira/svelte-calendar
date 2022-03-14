@@ -5,6 +5,14 @@ export const whichPicker = writable<'month' | 'days'>('days');
 export const month = writable(new Date().getMonth());
 export const year = writable(new Date().getFullYear());
 
+export const isToday = derived([year, month], ([$year, $month]) => (_day: number) => {
+	const date = new Date($year, $month, _day).toLocaleDateString();
+
+	const today = new Date().toLocaleDateString();
+
+	return date === today;
+});
+
 export const weekDays = [
 	'Sunday',
 	'Monday',
