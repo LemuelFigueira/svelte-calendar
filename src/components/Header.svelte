@@ -5,6 +5,8 @@
 	import BiMoon from 'svelte-icons-pack/bi/BiMoon';
 	import BiSun from 'svelte-icons-pack/bi/BiSun';
 	import { getContext } from 'svelte';
+	import { changeLocale, locale, localesOptions } from '../i18n';
+	import Select from './Select.svelte';
 
 	const { context: isDarkContext } = getContext('isDark');
 	const { isDark, handleChangeTheme } = isDarkContext;
@@ -22,6 +24,11 @@
 		</div>
 
 		<div class="right">
+			<Select
+				value={locale}
+				options={localesOptions}
+				on:select={(e) => changeLocale(e.detail.value)}
+			/>
 			<button cursor-pointer is-dark={$isDark || 'N'} on:click={() => handleChangeTheme()}>
 				{#if $isDark === 'N'}
 					<Icon className="icon" src={BiSun} />
