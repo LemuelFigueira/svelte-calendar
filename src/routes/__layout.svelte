@@ -6,6 +6,7 @@
 
 	import Header from '../components/Header.svelte';
 	import { isMounting } from '../stores/mount';
+	import { locale } from 'src/i18n';
 
 	const isDark = writable<string>('N');
 
@@ -33,6 +34,8 @@
 		if (storagedIsDark) {
 			$isDark = storagedIsDark;
 		}
+
+		locale.set(navigator.language);
 
 		isMounting.set(false);
 	});

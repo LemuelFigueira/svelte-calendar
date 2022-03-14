@@ -1,7 +1,7 @@
 import { derived, writable } from 'svelte/store';
 import translations from './translations';
 
-export const locale = writable(navigator.language || 'pt-BR');
+export const locale = writable('pt-BR');
 export const locales = Object.keys(translations);
 export const localesOptions = locales.map((locale) => ({
 	label: locale,
