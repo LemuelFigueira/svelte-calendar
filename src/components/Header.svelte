@@ -103,7 +103,7 @@
 		gap: 1rem;
 	}
 
-	:global .icon {
+	:global header .right .icon {
 		font-size: xx-large;
 
 		&:active {
