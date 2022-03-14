@@ -37,33 +37,26 @@ export const getFebruaryDays = (year: number) => {
 	return 28;
 };
 
-export const monthDays = [
-	31,
-	getFebruaryDays(new Date().getFullYear()),
-	31,
-	30,
-	31,
-	30,
-	31,
-	31,
-	30,
-	31,
-	30,
-	31
-];
+export const monthDays = derived([year], ([$year]) => {
+	return [31, getFebruaryDays($year), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+});
 
 function createArrayBySpecificLength(length: number, fillWithZero?: boolean) {
 	return new Array(length).fill(null).map((_, i) => (fillWithZero ? 0 : i + 1));
 }
 
-function generateMonthNumberDays(month: number, year: number) {
-	const firstDayNumber = new Date(year, month, 1).getDay();
+function generateMonthNumberDays(_month: number, _year: number, _monthDays: number[]) {
+	const firstDayNumber = new Date(_year, _month, 1).getDay();
 
 	const aux = createArrayBySpecificLength(firstDayNumber, true);
-	const monthDaysList = createArrayBySpecificLength(monthDays[month]);
+	const monthDaysList = createArrayBySpecificLength(_monthDays[_month]);
 
 	return [].concat(aux, monthDaysList);
 }
+
+export const monthName = derived([month], ([$month]) => {
+	return monthNames[$month];
+});
 
 export function increaseYear() {
 	year.update((y) => y + 1);
@@ -86,8 +79,9 @@ export function selectMonth(value: number) {
 	changePicker();
 }
 
-export const monthDaysAsNumber = derived([year, month], ([$year, $month]) => {
-	const result = generateMonthNumberDays($month, $year);
-
-	return result;
-});
+export const monthDaysAsNumber = derived(
+	[year, month, monthDays],
+	([$year, $month, $monthDays]) => {
+		return generateMonthNumberDays($month, $year, $monthDays);
+	}
+);

@@ -8,14 +8,14 @@
 		changePicker,
 		decreaseYear,
 		increaseYear,
-		month,
 		monthNames,
 		monthDaysAsNumber,
 		weekDays,
 		whichPicker,
 		year,
 		selectMonth,
-		getMonthNumberByName
+		getMonthNumberByName,
+		monthName
 	} from '../stores/calendar';
 </script>
 
@@ -30,7 +30,7 @@
 					on:click={changePicker}
 				>
 					<span>
-						{monthNames[$month]}
+						{$monthName}
 					</span>
 				</button>
 				<div class="year-selector">
@@ -223,7 +223,7 @@
 			padding: 0.5rem;
 
 			& span {
-				font-size: small;
+				font-size: medium;
 				font-weight: 700;
 			}
 		}
