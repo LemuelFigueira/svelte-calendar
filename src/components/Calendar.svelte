@@ -3,100 +3,116 @@
 	import BiLeftArrow from 'svelte-icons-pack/bi/BiLeftArrow';
 
 	import Icon from 'svelte-icons-pack/Icon.svelte';
+
 	import {
+		changePicker,
+		decreaseYear,
+		increaseYear,
 		month,
-		monthDays,
 		monthNames,
-		monthNumberDays,
+		monthDaysAsNumber,
 		weekDays,
-		year
+		whichPicker,
+		year,
+		selectMonth,
+		getMonthByName
 	} from '../stores/calendar';
-
-	function createArrayBySpecificLength(length: number, fillWithZero?: boolean) {
-		return new Array(length).fill(null).map((_, i) => (fillWithZero ? 0 : i + 1));
-	}
-
-	function generateMonthNumberDays(month: number) {
-		const year = new Date().getFullYear();
-
-		const firstDayNumber = new Date(year, month, 1).getDay();
-
-		const aux = createArrayBySpecificLength(firstDayNumber, true);
-		const monthDaysList = createArrayBySpecificLength(monthDays[month]);
-
-		return [].concat(aux, monthDaysList);
-	}
-
-	function increaseYear() {
-		year.update((y) => y + 1);
-	}
-
-	function decreaseYear() {
-		year.update((y) => y - 1);
-	}
 </script>
 
 <main>
-	<div class="header">
-		<button class:hover={true} class:cursor-pointer={true} class="month">
-			<span>
-				{monthNames[$month]}
-			</span>
-		</button>
-		<div class="year-selector">
-			<button
-				class:cursor-pointer={true}
-				class:hover={true}
-				class="decrease"
-				on:click={decreaseYear}
-			>
-				<Icon className="icon" src={BiLeftArrow} />
-			</button>
-			<span class="value">
-				{$year}
-			</span>
-			<button
-				class:cursor-pointer={true}
-				class:hover={true}
-				class="increase"
-				on:click={increaseYear}
-			>
-				<Icon className="icon" src={BiRightArrow} />
-			</button>
+	{#if $whichPicker === 'days'}
+		<div class="date-picker">
+			<div class="header">
+				<button
+					class:hover={true}
+					class:cursor-pointer={true}
+					class="month"
+					on:click={changePicker}
+				>
+					<span>
+						{monthNames[$month]}
+					</span>
+				</button>
+				<div class="year-selector">
+					<button
+						class:cursor-pointer={true}
+						class:hover={true}
+						class="decrease"
+						on:click={decreaseYear}
+					>
+						<Icon className="icon" src={BiLeftArrow} />
+					</button>
+					<span class="value">
+						{$year}
+					</span>
+					<button
+						class:cursor-pointer={true}
+						class:hover={true}
+						class="increase"
+						on:click={increaseYear}
+					>
+						<Icon className="icon" src={BiRightArrow} />
+					</button>
+				</div>
+			</div>
+			<div class="days">
+				<div class="name-days">
+					{#each weekDays as wDay}
+						<span>
+							{`${wDay}`.slice(0, 2)}
+						</span>
+					{/each}
+				</div>
+				<div class="number-days">
+					{#each $monthDaysAsNumber as mDay}
+						<span class:cursor-pointer={mDay > 0} class:hover={mDay > 0}>
+							{mDay > 0 ? mDay : ''}
+						</span>
+					{/each}
+				</div>
+			</div>
 		</div>
-	</div>
-	<div class="days">
-		<div class="name-days">
-			{#each weekDays as wDay}
-				<span>
-					{`${wDay}`.slice(0, 2)}
-				</span>
+	{:else if $whichPicker === 'month'}
+		<div class="month-picker">
+			{#each monthNames as monthName}
+				<button
+					class:hover={true}
+					class:cursor-pointer={true}
+					class="month"
+					on:click={() => selectMonth(getMonthByName(monthName))}
+				>
+					<span>
+						{monthName}
+					</span>
+				</button>
 			{/each}
 		</div>
-		<div class="number-days">
-			{#each $monthNumberDays as mDay}
-				<span class:cursor-pointer={mDay > 0} class:hover={mDay > 0}>
-					{mDay > 0 ? mDay : ''}
-				</span>
-			{/each}
-		</div>
-	</div>
+	{/if}
 </main>
 
 <style lang="scss">
 	main {
-		max-width: 300px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
 
 		color: var(--clr-font);
 
 		box-shadow: var(--lm-shadow-active);
 		padding: 0.5rem 1rem;
+
+		border: 0.5px var(--clr-primary);
+		border-top: 0;
+
+		border-style: outset;
+
+		border-radius: var(--br);
 	}
 
 	.days {
 		display: flex;
 		flex-direction: column;
-		justify-content: space-between;
+		justify-content: flex-start;
 		align-items: center;
 
 		gap: 1rem;
@@ -109,7 +125,7 @@
 	.number-days {
 		width: 100%;
 		display: grid;
-		grid-template-columns: repeat(7, 2rem);
+		grid-template-columns: repeat(7, auto);
 
 		& span {
 			text-align: center;
@@ -119,7 +135,7 @@
 	.name-days {
 		width: 100%;
 		display: grid;
-		grid-template-columns: repeat(7, 2rem);
+		grid-template-columns: repeat(7, auto);
 
 		& span {
 			text-align: center;
@@ -188,6 +204,27 @@
 				aspect-ratio: 1;
 
 				fill: var(--clr-font);
+			}
+		}
+	}
+
+	.month-picker {
+		display: grid;
+
+		grid-template-columns: repeat(3, auto);
+
+		overflow: hidden;
+
+		button {
+			width: 100%;
+
+			border-radius: var(--br);
+
+			padding: 0.5rem;
+
+			& span {
+				font-size: small;
+				font-weight: 700;
 			}
 		}
 	}

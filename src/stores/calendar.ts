@@ -1,5 +1,7 @@
 import { derived, writable } from 'svelte/store';
 
+export const whichPicker = writable<'month' | 'days'>('days');
+
 export const month = writable(new Date().getMonth());
 export const year = writable(new Date().getFullYear());
 
@@ -63,7 +65,28 @@ function generateMonthNumberDays(month: number, year: number) {
 	return [].concat(aux, monthDaysList);
 }
 
-export const monthNumberDays = derived([year, month], ([$year, $month]) => {
+export function increaseYear() {
+	year.update((y) => y + 1);
+}
+
+export function decreaseYear() {
+	year.update((y) => y - 1);
+}
+
+export function changePicker() {
+	whichPicker.update((p) => (p === 'month' ? 'days' : 'month'));
+}
+
+export function getMonthByName(value: string) {
+	return monthNames.indexOf(value);
+}
+
+export function selectMonth(value: number) {
+	month.set(value);
+	changePicker();
+}
+
+export const monthDaysAsNumber = derived([year, month], ([$year, $month]) => {
 	const result = generateMonthNumberDays($month, $year);
 
 	return result;
