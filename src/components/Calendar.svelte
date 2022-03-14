@@ -17,6 +17,7 @@
 		getMonthNumberByName,
 		monthName
 	} from '../stores/calendar';
+	import { t } from '../i18n';
 </script>
 
 <main>
@@ -30,7 +31,7 @@
 					on:click={changePicker}
 				>
 					<span>
-						{$monthName}
+						{$t($monthName)}
 					</span>
 				</button>
 				<div class="year-selector">
@@ -59,7 +60,7 @@
 				<div class="name-days">
 					{#each weekDays as wDay}
 						<span>
-							{`${wDay}`.slice(0, 2)}
+							{`${$t(wDay)}`.slice(0, 3)}
 						</span>
 					{/each}
 				</div>
@@ -82,7 +83,7 @@
 					on:click={() => selectMonth(getMonthNumberByName(monthName))}
 				>
 					<span>
-						{monthName}
+						{$t(monthName)}
 					</span>
 				</button>
 			{/each}
