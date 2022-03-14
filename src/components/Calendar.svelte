@@ -15,7 +15,7 @@
 		whichPicker,
 		year,
 		selectMonth,
-		getMonthByName
+		getMonthNumberByName
 	} from '../stores/calendar';
 </script>
 
@@ -79,7 +79,7 @@
 					class:hover={true}
 					class:cursor-pointer={true}
 					class="month"
-					on:click={() => selectMonth(getMonthByName(monthName))}
+					on:click={() => selectMonth(getMonthNumberByName(monthName))}
 				>
 					<span>
 						{monthName}

@@ -77,7 +77,7 @@ export function changePicker() {
 	whichPicker.update((p) => (p === 'month' ? 'days' : 'month'));
 }
 
-export function getMonthByName(value: string) {
+export function getMonthNumberByName(value: string) {
 	return monthNames.indexOf(value);
 }
 
