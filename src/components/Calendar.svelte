@@ -8,6 +8,7 @@
 		changePicker,
 		decreaseYear,
 		increaseYear,
+		month,
 		monthNames,
 		monthDaysAsNumber,
 		weekDays,
@@ -18,6 +19,17 @@
 		monthName
 	} from '../stores/calendar';
 	import { t } from '../i18n';
+	import { createEventDispatcher } from 'svelte';
+
+	const dispatch = createEventDispatcher();
+
+	function select(_dia: number) {
+		const diaSelecionado = new Date($year, $month, _dia);
+
+		dispatch('select', {
+			value: diaSelecionado
+		});
+	}
 </script>
 
 <main>
@@ -66,7 +78,11 @@
 				</div>
 				<div class="number-days">
 					{#each $monthDaysAsNumber as mDay}
-						<span class:cursor-pointer={mDay > 0} class:hover={mDay > 0}>
+						<span
+							on:click={() => mDay > 0 && select(mDay)}
+							class:cursor-pointer={mDay > 0}
+							class:hover={mDay > 0}
+						>
 							{mDay > 0 ? mDay : ''}
 						</span>
 					{/each}
